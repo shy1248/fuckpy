@@ -12,4 +12,4 @@
 """
 
 
-__all__ = ['logging_', 'email_', 'ping', 'resty', 'mysql', 'wechat']
+__all__ = ['logging_', 'email_', 'ping', 'resty', 'mysql', 'wechat', 'utils']
