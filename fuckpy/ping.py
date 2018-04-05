@@ -16,7 +16,7 @@ import array
 import time
 import socket
 
-from utils import is_ip
+from .utils import is_ip
 
 
 class Ping(object):

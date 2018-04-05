@@ -18,7 +18,7 @@ from distutils.core import setup
 
 
 _name = 'fuckpy'
-_version = '1.1'
+_version = '1.2'
 _author = 'yushuibo'
 _email = 'hengchen2005@gmail.com'
 _url = 'https://github.com/yushuibo/fuckpy'
@@ -38,5 +38,4 @@ setup(name=_name,
       author=_author,
       author_email=_email,
       url=_url,
-      packages=['fuckpy'],
-)
+      packages=['fuckpy'],)

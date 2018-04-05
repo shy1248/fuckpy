@@ -136,7 +136,7 @@ class PathDispatcher(object):
 
             @wraps(func)
             def wrapper(*args, **kwargs):
-                return func(*args, **kwargs)
+                return func
 
             return wrapper
 
@@ -160,7 +160,7 @@ class PathDispatcher(object):
 
             @wraps(func)
             def wrapper(*args, **kwargs):
-                return func(*args, **kwargs)
+                return func
 
             return wrapper
 

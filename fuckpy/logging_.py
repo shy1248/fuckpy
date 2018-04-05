@@ -14,8 +14,7 @@ import logging
 from logging import handlers
 
 # 日志格式
-_FORMAT = '%(asctime)s-[%(levelname)s]-%(name)s.%(module)s@line %(lineno)d: '\
-          '%(message)s'
+_FORMAT = '%(asctime)s - [%(levelname)s] - %(name)s.%(module)s: %(message)s'
 
 
 def init(filename=None):
