@@ -9,25 +9,27 @@
 @Create: 2018-03-27 23:31:42
 @Last Modified: 2018-03-27 23:31:42
 @Desc:
-    A Simple Client of Mysql.
+    一个简单的mysql客户端封装
 """
 
 import MySQLdb
-from sshtunnel import SSHTunnelForwarder
+
+#  from sshtunnel import SSHTunnelForwarder
 
 
 class SimpleMysqlClient(object):
     """
-    The class of mysql.
+    MySql客户端的简单封装。
 
-    args:
-        host: mysql server ip address
-        port: the port of mysql listen
-        user: user name of mysql
-        passwd: password of mysql
-        db: dest database
-        charset: charset of mysql connector, default is utf-8
+    参数：
+        host -- MySql服务器的IP地址
+        port -- MySql服务监听的端口
+        user -- MySql的用户名
+        passwd -- MySql的密码
+        db -- 目标数据库
+        charset -- MySql连接字符集，默认为utf-8
     """
+
     def __init__(self, host, port, user, passwd, db, charset='utf8'):
         self.host = host
         self.port = port
@@ -40,29 +42,35 @@ class SimpleMysqlClient(object):
 
     @property
     def connector(self):
+        """返回mysql的连接对象"""
         conn = MySQLdb.connect(self.host, self.port, self.user, self.passwd,
                                self.db, self.charset)
         return conn
 
     @property
     def cursor(self):
+        """返回mysql的游标对象"""
         corsur = self.connector.cursor()
         return corsur
 
     def fetchone(self, sql, *args, **kwargs):
+        """返回SQL Select语句结果集的第一条记录"""
         c = self.cursor
         c.execute(sql, *args, **kwargs)
         return c.fetchone()
 
     def fetchmany(self, size, sql, *args, **kwargs):
+        """返回SQL Select语句结果的多条记录"""
         c = self.cursor
         c.execute(sql, *args, **kwargs)
         return c.fetchmany(size=size)
 
     def fetchall(self, sql, *args, **kwargs):
+        """返回SQL Select语句结果集的所有记录"""
         c = self.cursor
         c.execute(sql, *args, **kwargs)
         return c.fetchall()
 
     def close(self):
+        """关闭mysql的连接"""
         self.connector.close()
