@@ -53,7 +53,7 @@ class CachedRestyManager(object):
 
     def getinstance(self, name):
         """通过Dispatcher返回一个Resty的实例并将其缓存，当缓存实例已经存在时，直接返回该缓存实例"""
-        if dispatcher not in self._cache:
+        if name not in self._cache.keys():
             instance = Resty(name)
             self._cache[name] = instance
         else:

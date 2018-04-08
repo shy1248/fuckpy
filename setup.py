@@ -18,7 +18,7 @@ from distutils.core import setup
 
 
 _name = 'fuckpy'
-_version = '1.2'
+_version = '1.3'
 _author = 'yushuibo'
 _email = 'hengchen2005@gmail.com'
 _url = 'https://github.com/yushuibo/fuckpy'
