@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-@Author: yushuibo
-@Copyright (c) 2018 yushuibo. All rights reserved.
-@Licence: GPL-2
-@Email: hengchen2005@gmail.com
-@File: singleton.py
-@Create: 2018-04-04 22:16:02
-@Last Modified: 2018-04-04 22:16:02
-@Desc: 单例模式2中常见实现方式
-"""
+
+# @Date    : 2018-10-26 17:43:43
+# @Author  : shy (hengchen2005@gmail.com)
+# @Desc    : -
+# @Version : v1.0
+# @Licence: GPLv3
+# @Copyright (c) 2018-2022 shy. All rights reserved.
 
 from functools import wraps
 
 
-# 单例模式类继承实现
 class Singleton(object):
-    """
-    单例模式父类。使用方法：
-        class testSingleton(Singleton):
+    '''A singleton implementation using class extend
+
+    usage：
+        class MySingletonCalss(Singleton):
             pass
-    """
+
+    Variables:
+        _instance {dict} -- The dict of instances
+    '''
 
     _instance = None
 
@@ -30,14 +30,20 @@ class Singleton(object):
         return cls._instance
 
 
-# 单例模式装饰器实现
 def singleton(cls):
-    """
-    单例模式装饰器。使用方法：
+    '''A singleton implementation using decorator
+
+    usage:
         @singleton
         class testSingleton(object):
             pass
-    """
+
+    Decorators:
+        wraps
+
+    Returns:
+        [cls] -- A instance of class which be decorated
+    '''
 
     instances = {}
 

@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-@Author: yushuibo
-@Copyright (c) 2018 yushuibo. All rights reserved.
-@Licence: GPL-2
-@Email: hengchen2005@gmail.com
-@Create: ping.py
-@Last Modified: 2018/4/1 20:57
-@Desc: --
-"""
+
+# @Date    : 2018-10-26 17:43:43
+# @Author  : shy (hengchen2005@gmail.com)
+# @Desc    : -
+# @Version : v1.0
+# @Licence: GPLv3
+# @Copyright (c) 2018-2022 shy. All rights reserved.
 
 import os
 import struct
@@ -16,31 +14,28 @@ import array
 import time
 import socket
 
-from .utils import is_ip
+from .utils import isip
 
 
 class Ping(object):
-    """
-    python实现icmp协议的ping工具实现。
-
-    参数：
-        timeout    -- Socket超时，默认3秒
-        IPv6       -- 是否是IPv6，默认为False
-    """
+    '''A icmp protocol implemention'''
 
     def __init__(self, timeout=3, ipv6=False):
         self.timeout = timeout
         self.ipv6 = ipv6
 
-        # 用于ICMP报文的负荷字节（8bit）
+        # The icmp package length（8bit）
         self.__data = struct.pack('d', time.time())
-        # 构造ICMP报文的ID字段，无实际意义
+        # The id of the icmp package
         self.__id = os.getpid()
 
-    # 属性装饰器
     @property
     def __socket(self):
-        """创建ICMP Socket，并返回ICMP类型的Socket"""
+        '''Get icmp socket
+
+        Returns:
+            [socket] -- The icmp socket
+        '''
         if not self.ipv6:
             sock = socket.socket(socket.AF_INET, socket.SOCK_RAW,
                                  socket.getprotobyname("icmp"))
@@ -52,16 +47,20 @@ class Ping(object):
 
     @property
     def __packet(self):
-        """构造ICMP报文, 并返回带校验和的数据报文"""
+        '''Construct icmp package
+
+        Returns:
+            [pack] -- The package which will be send
+        '''
         if not self.ipv6:
             # TYPE、CODE、CHKSUM、ID、SEQ
             header = struct.pack('bbHHh', 8, 0, 0, self.__id, 0)
         else:
             header = struct.pack('BbHHh', 128, 0, 0, self.__id, 0)
 
-        # 不带校验和的数据包
+        # The package without checksum
         packet = header + self.__data
-        # 生成校验和
+        # The package with checksum
         checksum = in_checksum(packet)
 
         if not self.ipv6:
@@ -71,17 +70,17 @@ class Ping(object):
 
         return header + self.__data
 
-    def send(self, ip):
-        """
-        利用ICMP报文探测网络主机存活。
+    def ping(self, ip):
+        '''Send package to remote host for a ping test
 
-        参数:
-            ip -- 要探测的主机地址
-        返回：
-            主机存活时返回收到的数据，否则返回None
-        """
+        Arguments:
+            ip {str} -- The IP address of remote host
 
-        if is_ip(ip):
+        Returns:
+            {bytes or None} -- The remote host respose
+        '''
+
+        if isip(ip):
             sock = self.__socket
             try:
                 sock.sendto(self.__packet, (ip, 0))
@@ -89,17 +88,16 @@ class Ping(object):
             except socket.timeout:
                 resp = None
             return resp
+        else:
+            raise Exception('Invalid ip address: "%s"' % ip)
 
 
 def in_checksum(packet):
-    """
-    ICMP 报文效验和计算方法。
+    '''ICMP package's checksum
 
-    参数：
-        packet -- 原始数据包
-    返回：
-        带校验和的数据包
-    """
+    Arguments:
+        packet {byte} -- The package without checksum
+    '''
 
     if len(packet) & 1:
         packet = packet + '\\0'
@@ -116,5 +114,5 @@ if __name__ == '__main__':
     ping = Ping(6)
     ip = socket.gethostbyname('baidu.com')
     print('ip={}'.format(ip))
-    resp = ping.send(ip)
+    resp = ping.ping(ip)
     print(resp)

@@ -1,22 +1,20 @@
-#!usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-@Author: yushuibo
-@Copyright (c) 2018 yushuibo. All rights reserved.
-@Licence: GPL-2
-@Email: hengchen2005@gmail.com
-@File: resty.py
-@Create: 2018-04-01 16:45:48
-@Last Modified: 2018-04-01 16:45:48
-@Desc: 一个简单的rest服务实现
-"""
+
+# @Date    : 2018-10-27 02:58:42
+# @Author  : shy (hengchen2005@gmail.com)
+# @Desc    : A simple resty server implemention
+# @Version : v1.0
+# @Licence: GPLv3
+# @Copyright (c) 2018-2022 shy. All rights reserved.
+
 
 import cgi
 import weakref
 from functools import wraps
 from wsgiref.simple_server import make_server
 
-# 定义404返回的html
+# Define 404 page
 _notfound_resp = """\
 <html>
 <title>Page Not Found!</title>
@@ -28,31 +26,36 @@ _notfound_resp = """\
 
 
 def notfound_404(environ, start_response):
-    """
-    默认的404请求的处理函数。
+    '''The 404 page handler
 
-    参数：
-        environ --
-        封装请求的参数。例如：可以使用environ['params']来获取请求参数的字典
-        start_response -- 定义rest服务响应的头部信息
+    Arguments:
+        environ {dict} -- The dict contains request parameters
+        start_response -- The response of header
 
-    """
+    Yields:
+        [str] -- The response body
+    '''
 
     start_response('404 Not Found', [('content-type', 'text/html')])
     yield _notfound_resp.encode('utf-8')
 
 
-# Resty的缓存工具类
 class CachedRestyManager(object):
-    """
-    Resty的缓存管理工具类。当使用相同的Dispatcher生成Resty时，都会返回相同的Resty实例。
-    """
+    '''A cache for instance of Resty'''
 
     def __init__(self):
         self._cache = weakref.WeakKeyDictionary()
 
     def getinstance(self, name):
-        """通过Dispatcher返回一个Resty的实例并将其缓存，当缓存实例已经存在时，直接返回该缓存实例"""
+        '''Return the instance of Resty
+
+         Arguments:
+            name {str} -- The key of the Resty's instance
+
+        Returns:
+            [Resty] -- The instance of Resty
+        '''
+
         if name not in self._cache.keys():
             instance = Resty(name)
             self._cache[name] = instance
@@ -61,38 +64,35 @@ class CachedRestyManager(object):
         return instance
 
     def clear(self):
-        """清除Resty的实例缓存"""
+        '''Clean the cache of instance'''
+
         self._cache.clear()
 
 
-# Resty服务类
 class Resty(object):
-    """Resty服务类"""
     manager = CachedRestyManager()
 
     def __init__(self, name):
         self.name = name
 
     def getinstance(self, name):
-        """返回Resty的实例，参考CachedRestyManager.getinstance方法"""
+        '''Return a instance of Resty with the specil name'''
+
         return Resty.manager.getinstance(name)
 
-    # Resty的http服务
-    def listen(self, port):
-        """
-        启动Resty的http服务。
+    def listen(self, host, port):
+        '''The HTTP server
 
-        参数：
-            port -- resty服务监听的端口
-        """
+        Arguments:
+            port {int} -- The HTTP server listen port
+        '''
 
-        httpd = make_server('', port, PathDispatcher)
+        httpd = make_server(host, port, PathDispatcher)
         httpd.serve_forever()
 
 
-# Resty服务的路由分发类
 class PathDispatcher(object):
-    """请求路径的路由分发类"""
+    '''The route dispatcher of request'''
 
     _pathmap = {}
 
@@ -106,29 +106,38 @@ class PathDispatcher(object):
 
     @classmethod
     def regist(cls, method, path, func):
-        """
-        给PathDispatcher绑定响应的处理函数。
+        '''Bind a handler for a request path with specil request method
 
-        参数：
-            method -- 请求方法。如GET，POST等
-            path -- 请求的URL路径
-            func -- 请求路径对应的处理函数
-        """
+        Arguments:
+            method {str} -- The method of request. Such as 'GET', 'POST' and so on
+            path {str} -- The path of request
+            func {str} -- The name of handler function
+
+        Returns:
+            [func] -- The function of hanfler
+        '''
 
         cls._pathmap[method.lower(), path] = func
         return func
 
     @classmethod
     def get(cls, path):
-        """
-        Resty服务GET请求装饰器。使用方法：
+        '''The decorator of GET method
+
+        usage:
             @PathDispatcher.get('/hello')
             def hello_handler(envrion, start_response):
                 pass
 
-        参数：
-            path -- GET请求路径
-        """
+        Decorators:
+            wraps
+
+        Arguments:
+            path {str} -- The path of request
+
+        Returns:
+            [func] -- The function of handler
+        '''
 
         def decorate(func):
             method = 'GET'
@@ -144,15 +153,22 @@ class PathDispatcher(object):
 
     @classmethod
     def post(cls, path):
-        """
-        Resty服务POST请求装饰器。使用方法：
+        '''The decorator of POST method
+
+        usage:
             @PathDispatcher.post('/hello')
             def hello_handler(envrion, start_response):
                 pass
 
-        参数：
-            path -- POST请求路径
-        """
+        Decorators:
+            wraps
+
+        Arguments:
+            path {str} -- The path of request
+
+        Returns:
+            [func] -- The function of handler
+        '''
 
         def decorate(func):
             method = 'POST'
@@ -176,4 +192,4 @@ if __name__ == '__main__':
 
     #  Dispatcher.regist('GET', '/hello', default)
     resty = Resty('test')
-    resty.listen(8080)
+    resty.listen('localhost', 8080)

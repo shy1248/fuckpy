@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-@Author: yushuibo
-@Copyright (c) 2018 yushuibo. All rights reserved.
-@Licence: GPL-2
-@Email: hengchen2005@gmail.com
-@File: setup.py
-@Create: 2018-04-03 23:49:42
-@Last Modified: 2018-04-03 23:49:42
-@Desc: --
-"""
+
+# @Date    : 2018-10-27 03:03:07
+# @Author  : shy (hengchen2005@gmail.com)
+# @Desc    : -
+# @Version : v1.0
+# @Licence: GPLv3
+# @Copyright (c) 2018-2022 shy. All rights reserved.
 
 
 import os
@@ -18,8 +15,8 @@ from distutils.core import setup
 
 
 _name = 'fuckpy'
-_version = '1.3'
-_author = 'yushuibo'
+_version = '1.4'
+_author = 'shy'
 _email = 'hengchen2005@gmail.com'
 _url = 'https://github.com/yushuibo/fuckpy'
 
