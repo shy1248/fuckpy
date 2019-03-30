@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,18 +7,15 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 18:16:13
-@LastTime: 2019-03-30 10:57:28
+@LastTime: 2019-03-30 14:27:46
 '''
-
 
 import os
 import __main__
 import logging
 from logging import handlers
 
-
 from sysinfo import SYS_TYPE
-
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
@@ -53,7 +49,8 @@ class ColoredFormatter(logging.Formatter):
 
         levelname = record.levelname
         if self.colored and levelname in COLORS:
-            record.msg = COLOR_SEQ % (30 + COLORS[levelname]) + record.msg + RESET_SEQ
+            record.msg = COLOR_SEQ % (
+                30 + COLORS[levelname]) + record.msg + RESET_SEQ
         else:
             record.msg = record.msg[len(COLOR_SEQ)::].replace(RESET_SEQ, '')
         return logging.Formatter.format(self, record)
@@ -80,7 +77,6 @@ fh = handlers.TimedRotatingFileHandler(
 fh.setLevel(logging.INFO)
 fh.setFormatter(ColoredFormatter(fh_format, colored=False))
 logger.addHandler(fh)
-
 
 if __name__ == '__main__':
     logger.debug('Logging DEBUG example中文 ...')

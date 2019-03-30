@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,9 +7,8 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-02-02 16:43:24
-@LastTime: 2019-03-26 23:53:15
+@LastTime: 2019-03-30 14:27:06
 '''
-
 
 import os
 import smtplib
@@ -25,7 +23,8 @@ from simplelogger import logger
 class Account(object):
     '''A account of email'''
 
-    def __init__(self, server, port, username, password, name='Robat', ssl=True):
+    def __init__(self, server, port, username, password, name='Robat',
+                 ssl=True):
         self.server = server
         self.port = port
         self.username = username
@@ -48,7 +47,8 @@ class Account(object):
             smtp.login(self.username, self.passwd)
         except Exception, e:
             logger.error(
-                'Email client connect to server or login faild. The rease is:\n%s' % e)
+                'Email client connect to server or login faild. The rease is:\n%s'
+                % e)
 
         return smtp
 
@@ -56,7 +56,13 @@ class Account(object):
 class Email(object):
     '''An email object'''
 
-    def __init__(self, account, tolist, content, cclist=None, subject=None, attaches=None):
+    def __init__(self,
+                 account,
+                 tolist,
+                 content,
+                 cclist=None,
+                 subject=None,
+                 attaches=None):
         self.account = account
         self.tolist = tolist
         self.content = content
@@ -97,8 +103,10 @@ class Email(object):
                     logger.warn('Email attachement "%s" dose exist.' % attache)
 
                 filepart = MIMEApplication(open(attache, 'rb').read())
-                filepart.add_header('Content-Disposition',
-                                    'attachment', filename=os.path.basename(attache))
+                filepart.add_header(
+                    'Content-Disposition',
+                    'attachment',
+                    filename=os.path.basename(attache))
                 msg.attach(filepart)
 
         try:
@@ -117,6 +125,10 @@ if __name__ == '__main__':
     tolist = ['zzzzz@ebupt.com']
 
     account = Account(server, port, username, password)
-    email_ = Email(account, tolist, 'This is a test message!',
-                   subject='Email test!', attaches=['resty.py'])
+    email_ = Email(
+        account,
+        tolist,
+        'This is a test message!',
+        subject='Email test!',
+        attaches=['resty.py'])
     email_.send()

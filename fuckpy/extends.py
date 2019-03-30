@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,23 +7,31 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-03 23:49:07
-@LastTime: 2019-03-30 13:20:22
+@LastTime: 2019-03-30 14:18:20
 '''
 
-
 import re
+import sys
 import time
 import collections
 
 from datetime import date
 from datetime import timedelta
 
+from simplelogger import logger
+
 
 def strtodatetime(strtime):
     fmt = '%Y%m%d%H%M%S'
-    strtime = re.sub(r'[^\d]', '', strtime)
-    return date.fromtimestamp(
-        time.mktime(time.strptime(strtime, fmt[:(len(strtime) - 2 if len(strtime) % 2 == 0 else len(strtime) - 1)])))
+    _strtime = re.sub(r'[^\d]', '', strtime)
+    try:
+        return date.fromtimestamp(
+            time.mktime(
+                time.strptime(
+                    _strtime, fmt[:(len(_strtime) - 2 if len(_strtime) %
+                                    2 == 0 else len(_strtime) - 1)])))
+    except ValueError:
+        raise ValueError('String "{}" can not format to datetime.'.format(strtime))
 
 
 class OrderedSet(collections.OrderedDict, collections.MutableSet):
@@ -83,7 +90,8 @@ class DateRange(object):
         self.step = step
 
         if not isinstance(step, int) or step <= 0:
-            raise StopIteration("Iteration[step] must be a non zero positive interger.")
+            raise StopIteration(
+                "Iteration[step] must be a non zero positive interger.")
 
         if self.start >= self.stop:
             raise StopIteration('Iteration[start] >= Interation[stop].')

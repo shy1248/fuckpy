@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,9 +7,8 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-06 11:15:24
-@LastTime: 2019-03-26 23:53:58
+@LastTime: 2019-03-30 14:27:22
 '''
-
 
 import os
 import struct

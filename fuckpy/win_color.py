@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,9 +7,8 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 11:19:11
-@LastTime: 2019-03-26 23:55:50
+@LastTime: 2019-03-30 14:28:55
 '''
-
 
 import ctypes
 STD_INPUT_HANDLE = -10
@@ -58,8 +56,8 @@ class Color:
         self.reset_color()
 
     def print_red_text_with_blue_bg(self, print_text):
-        self.set_cmd_color(FOREGROUND_RED | FOREGROUND_INTENSITY |
-                           BACKGROUND_BLUE | BACKGROUND_INTENSITY)
+        self.set_cmd_color(FOREGROUND_RED | FOREGROUND_INTENSITY
+                           | BACKGROUND_BLUE | BACKGROUND_INTENSITY)
         print print_text
         self.reset_color()
 

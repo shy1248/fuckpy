@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,15 +7,15 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 11:26:40
-@LastTime: 2019-03-26 23:51:56
+@LastTime: 2019-03-30 14:21:33
 '''
-
 
 import sys
 
 
 class _Constant(object):
     '''A constant implementation'''
+
     class ConstError(TypeError):
         pass
 
@@ -32,7 +31,6 @@ class _Constant(object):
 
 
 sys.modules[__name__] = _Constant()
-
 
 if __name__ == '__main__':
     import const

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,9 +7,8 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-16 10:53:26
-@LastTime: 2019-03-26 23:52:11
+@LastTime: 2019-03-30 14:21:13
 '''
-
 
 import os
 import sys
@@ -35,8 +33,8 @@ def daemonize(stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
         if pid > 0:
             sys.exit(0)
     except OSError, e:
-        sys.stderr.write("Fork #1 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
-        sys.exit(1)
+        raise OSError(
+            "Fork #1 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
 
     # os.chdir("/")
     os.umask(0)
@@ -49,8 +47,8 @@ def daemonize(stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
             # second parent progress exit
             sys.exit(0)
     except OSError, e:
-        sys.stderr.write("Fork #2 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
-        sys.exit(1)
+        raise OSError(
+            "Fork #2 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
 
     # progress is daemonized, redirect the fi ledescraptor
     for f in sys.stdout, sys.stderr:
@@ -71,7 +69,12 @@ class Daemon():
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null', args=None):
+    def __init__(self,
+                 pidfile,
+                 stdin='/dev/null',
+                 stdout='/dev/null',
+                 stderr='/dev/null',
+                 args=None):
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -90,8 +93,8 @@ class Daemon():
                 # exit first parent
                 sys.exit(0)
         except OSError, e:
-            sys.stderr.write("Fork #1 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
-            sys.exit(1)
+            raise OSError("Fork #1 failed: (ERROR CODE: %d), %s\n" %
+                          (e.errno, e.strerror))
 
         # decouple from parent environment
         # os.chdir("/")
@@ -105,8 +108,8 @@ class Daemon():
                 # exit from second parent
                 sys.exit(0)
         except OSError, e:
-            sys.stderr.write("Fork #2 failed: (ERROR CODE: %d), %s\n" % (e.errno, e.strerror))
-            sys.exit(1)
+            raise OSError("Fork #2 failed: (ERROR CODE: %d), %s\n" %
+                          (e.errno, e.strerror))
 
         # redirect standard file descriptors
         sys.stdout.flush()
@@ -141,8 +144,7 @@ class Daemon():
 
         if pid:
             message = "Pidfile %s already exist. Daemon already running?\n"
-            sys.stderr.write(message % self.pidfile)
-            sys.exit(1)
+            raise OSError(message % self.pidfile)
 
         # Start the daemon
         self.daemonize()
@@ -176,8 +178,7 @@ class Daemon():
                 if os.path.exists(self.pidfile):
                     os.remove(self.pidfile)
             else:
-                print str(err)
-                sys.exit(1)
+                raise OSError(err)
 
     def restart(self):
         """

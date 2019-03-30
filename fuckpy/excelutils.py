@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: A simple toolkit for write anfd read excel file
 @Since: 2019-03-29 19:35:10
-@LastTime: 2019-03-30 13:19:50
+@LastTime: 2019-03-30 14:06:02
 '''
 
 import os
@@ -93,9 +93,9 @@ class ExcelUtil(object):
         for row_id, row in enumerate(rows, start=2):
             for column_id, column in enumerate(row, start=1):
                 if isinstance(column, unicode):
-                    curr_with = len(column.encode('utf-8')) + 2
+                    curr_with = len(column.encode('utf-8')) + 1
                 else:
-                    curr_with = len(str(column)) + 2
+                    curr_with = len(str(column)) + 1
                 last_width = max_width.get(column_id)
                 if not last_width or curr_with > last_width:
                     max_width[column_id] = curr_with

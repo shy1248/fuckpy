@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,14 +7,12 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-03 22:50:33
-@LastTime: 2019-03-26 23:56:32
+@LastTime: 2019-03-30 14:29:18
 '''
-
 
 import os
 import sys
 from distutils.core import setup
-
 
 _name = 'fuckpy'
 _version = '1.4'
@@ -33,9 +30,11 @@ if sys.argv[-1] == 'tag':
     os.system("git push --tags")
     sys.exit()
 
-setup(name=_name,
-      version=_version,
-      author=_author,
-      author_email=_email,
-      url=_url,
-      packages=['fuckpy'],)
+setup(
+    name=_name,
+    version=_version,
+    author=_author,
+    author_email=_email,
+    url=_url,
+    packages=['fuckpy'],
+)

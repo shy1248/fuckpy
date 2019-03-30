@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-
 '''
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
@@ -8,17 +7,17 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-12-21 18:06:56
-@LastTime: 2019-03-30 00:30:54
+@LastTime: 2019-03-30 14:28:23
 '''
-
 
 import os
 import json
 import tarfile
 
-
-SUFFIXES = {1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-            1024: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']}
+SUFFIXES = {
+    1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    1024: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+}
 
 
 def creattmpfile(file_, size):
@@ -46,7 +45,8 @@ def isip(ip):
 
     ip = [int(x) for x in ip.split('.') if x.isdigit()]
     if len(ip) == 4:
-        if (0 < ip[0] < 223 and ip[0] != 127 and ip[1] < 256 and ip[2] < 256 and 0 < ip[3] < 255):
+        if (0 < ip[0] < 223 and ip[0] != 127 and ip[1] < 256 and ip[2] < 256 and
+                0 < ip[3] < 255):
             return True
     return False
 
@@ -72,8 +72,8 @@ def mkips(start, end, ipv6=False):
         return IPy.IP(ip).int()
 
     ip_pool = {
-        IPy.intToIp(ip, ip_ver)
-        for ip in range(int_ip(start), int_ip(end) + 1)
+        IPy.intToIp(ip, ip_ver) for ip in range(int_ip(start),
+                                                int_ip(end) + 1)
     }
     return {ip for ip in ip_pool if isip(ip)}
 
