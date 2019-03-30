@@ -1,12 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2018-10-27 02:58:42
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : A simple resty server implemention
-# @Version : v1.0
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2018-11-16 11:01:28
+@LastTime: 2019-03-26 23:54:08
+'''
 
 
 import cgi

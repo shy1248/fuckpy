@@ -1,12 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2018-11-03 14:51:40
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : A constant implemention
-# @Version : v1.0
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2019-01-06 11:26:40
+@LastTime: 2019-03-26 23:51:56
+'''
 
 
 import sys
@@ -18,7 +21,7 @@ class _Constant(object):
         pass
 
     def __setattr__(self, name, value):
-        if self.__dict__.has_key(name):
+        if name in self.__dict__:
             raise self.ConstError("Can't rebind constant '%s'." % name)
         self.__dict__[name] = value
 

@@ -1,19 +1,20 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# @Date    : 2018-10-26 17:21:22
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : A database common tools
-# @Version : v1.0
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+# -*- coding=UTF-8 -*-
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2019-01-17 15:03:29
+@LastTime: 2019-03-26 23:52:54
+'''
 
 import os
 import sys
 import abc
 import subprocess
 import ConfigParser
-
 
 import pymysql
 import cx_Oracle
@@ -22,7 +23,6 @@ from pyhive import hive
 from simplelogger import logger
 from singleton import singleton
 from extends import OrderedSet
-
 
 HIVE = 0
 MYSQL = 1
@@ -157,8 +157,8 @@ class DatabaseClient(object):
                     cursor.execute(sql)
                     results[sql] = cursor.fetchall()
                 except Exception, e:
-                    logger.error(
-                        'Execute SQL "%s" failed! The rease is:\n%s' % (sql, str(e)))
+                    logger.error('Execute SQL "%s" failed! The rease is:\n%s' %
+                                 (sql, str(e)))
                     results[sql] = []
                 finally:
                     cursor.close()
@@ -185,8 +185,8 @@ class DatabaseClient(object):
                     logger.debug('Execute SQL: %s' % sql)
                     cursor.execute(sql)
                 except Exception, e:
-                    logger.error(
-                        'Execute SQL "%s" failed! The rease is:\n%s' % (sql, str(e)))
+                    logger.error('Execute SQL "%s" failed! The rease is:\n%s' %
+                                 (sql, str(e)))
                 finally:
                     self.connection.commit()
                     cursor.close()
@@ -240,8 +240,13 @@ class MySQLClient(DatabaseClient):
         '''
 
         try:
-            conn = pymysql.connect(host=self.host, port=int(self.port), user=self.username,
-                                   passwd=self.passwd, db=self.db, charset='utf8')
+            conn = pymysql.connect(
+                host=self.host,
+                port=int(self.port),
+                user=self.username,
+                passwd=self.passwd,
+                db=self.db,
+                charset='utf8')
             logger.info('Connect to MySQL database successed!')
             return conn
         except Exception, e:
@@ -261,17 +266,25 @@ class HiveClient(DatabaseClient):
         '''
 
         try:
-            conn = hive.connect(host=self.host, port=self.port,
-                                username=self.username, database=self.db)
+            conn = hive.connect(
+                host=self.host,
+                port=self.port,
+                username=self.username,
+                database=self.db)
             logger.info('Connect to Hive database successed!')
             return conn
         except Exception, e:
             logger.error(
                 'Connect to Hive databse failed. The rease is:\n%s' % str(e))
             logger.info('Try to using HiveCli...')
-            if subprocess.call('which hive --skip-alias', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 1:
+            if subprocess.call(
+                    'which hive --skip-alias',
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE) == 1:
                 logger.error(
-                    'Command "hive" not found, please make sure hive has been installed and add to system path.')
+                    'Command "hive" not found, please make sure hive has been installed and add to system path.'
+                )
                 sys.exit(0)
             else:
                 logger.info('Using HiveCli instead HiveServer2...')

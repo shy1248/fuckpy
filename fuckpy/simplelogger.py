@@ -1,12 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2018-10-28 01:05:15
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : -
-# @Version : $Id$
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2019-01-06 18:16:13
+@LastTime: 2019-03-30 10:57:28
+'''
 
 
 import os
@@ -44,23 +47,21 @@ class ColoredFormatter(logging.Formatter):
         self.colored = colored
 
     def format(self, record):
-        # TODO: waitting for implemention on windows platform 
+        # TODO: waitting for implemention on windows platform
         if SYS_TYPE == 'Windows':
             return logging.Formatter.format(self, record)
 
         levelname = record.levelname
         if self.colored and levelname in COLORS:
-            record.levelname = COLOR_SEQ % (
-                30 + COLORS[levelname]) + levelname + RESET_SEQ
+            record.msg = COLOR_SEQ % (30 + COLORS[levelname]) + record.msg + RESET_SEQ
         else:
-            record.levelname = levelname[len(
-                COLOR_SEQ)::].replace(RESET_SEQ, '')
+            record.msg = record.msg[len(COLOR_SEQ)::].replace(RESET_SEQ, '')
         return logging.Formatter.format(self, record)
 
 
 # log format
-# logformat = '[%(asctime)s] - [%(levelname)s]: %(message)s (%(filename)s:%(lineno)d)'
-logformat = '[%(asctime)s] - [%(levelname)s]: %(message)s'
+ch_format = '%(message)s'
+fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
 appname = os.path.basename(os.path.splitext(__main__.__file__)[0])
 # log file name
 logfile = '%s.log' % appname
@@ -71,13 +72,13 @@ logger.setLevel(logging.DEBUG)
 # add console handler
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
-ch.setFormatter(ColoredFormatter(logformat, colored=True))
+ch.setFormatter(ColoredFormatter(ch_format, colored=True))
 logger.addHandler(ch)
 # add file handler
 fh = handlers.TimedRotatingFileHandler(
     logfile, when='D', interval=1, backupCount=3, encoding='utf8')
 fh.setLevel(logging.INFO)
-fh.setFormatter(ColoredFormatter(logformat, colored=True))
+fh.setFormatter(ColoredFormatter(fh_format, colored=False))
 logger.addHandler(fh)
 
 

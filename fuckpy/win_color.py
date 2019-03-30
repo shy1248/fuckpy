@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2019-01-06 11:17:34
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : -
-# @Version : $Id$
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2019-01-06 11:19:11
+@LastTime: 2019-03-26 23:55:50
+'''
+
 
 import ctypes
 STD_INPUT_HANDLE = -10

@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2019-01-06 11:20:44
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : -
-# @Version : v1.0
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2019-01-06 11:38:16
+@LastTime: 2019-03-26 23:55:03
+'''
+
 
 import platform
 

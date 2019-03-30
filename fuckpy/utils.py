@@ -1,12 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding=UTF-8 -*-
 
-# @Date    : 2018-10-26 17:43:43
-# @Author  : shy (hengchen2005@gmail.com)
-# @Desc    : -
-# @Version : v1.0
-# @Licence: GPLv3
-# @Copyright (c) 2018-2022 shy. All rights reserved.
+'''
+@Author: shy
+@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@Version: v1.0
+@Licence: GPLv3
+@Description: -
+@Since: 2018-12-21 18:06:56
+@LastTime: 2019-03-30 00:30:54
+'''
 
 
 import os
