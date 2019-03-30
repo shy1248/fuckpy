@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: A simple toolkit for write anfd read excel file
 @Since: 2019-03-29 19:35:10
-@LastTime: 2019-03-30 11:04:00
+@LastTime: 2019-03-30 13:19:50
 '''
 
 import os
@@ -33,7 +33,7 @@ class ExcelUtil(object):
 
     def __init__(self):
         __style = NamedStyle(name='simple')
-        __style.font = Font(bold=True, size=12, color=colors.WHITE)
+        __style.font = Font(bold=True, size=11, color=colors.WHITE)
         __style.fill = PatternFill(patternType='solid', fgColor=colors.BLUE)
         bd = Side(style='thin', color=colors.BLACK)
         self.__border = Border(left=bd, top=bd, right=bd, bottom=bd)
@@ -43,7 +43,7 @@ class ExcelUtil(object):
         self.__header_style = __style
 
     def write(self, file, data, sheet=None, is_overwrite=False):
-        """Write data to excel file.
+        '''Write data to excel file.
         
         Arguments:
             file {str} -- The absolute name of excel file
@@ -57,7 +57,7 @@ class ExcelUtil(object):
             sheet {str} -- The name of destnation sheet.
             is_overwrite {bool} -- when the destnation file exist, it will be overwrite
                 when this flag is true (default: {False})
-        """
+        '''
 
         if not is_overwrite and os.path.isfile(file):
             logger.error(
@@ -107,7 +107,7 @@ class ExcelUtil(object):
         wb.save(file)
 
     def read(self, file, sheet, rows=[], columns=[]):
-        """Read data from excel file.
+        '''Read data from excel file.
         
         Arguments:
             file {str} -- The absolute path of the destination file
@@ -119,11 +119,12 @@ class ExcelUtil(object):
         
         Returns:
             list -- A list of rows, and a tuple for each row
-        """
+        '''
 
         if not os.path.isfile(file):
-            logger.error('The destination file {} does\'t not exist, abort.'.format(
-                file))
+            logger.error(
+                'The destination file {} does\'t not exist, abort.'.format(
+                    file))
             sys.exit(1)
         if rows and not isinstance(rows, list):
             logger.error('Type error, parameter rows must be a list.')
@@ -132,10 +133,10 @@ class ExcelUtil(object):
             logger.error('Type error, parameter columns must be a list.')
             sys.exit(1)
         if filter(lambda x: not isinstance(x, int) or x <= 0, rows):
-            logger.error('The row filters must be positive integers.')
+            logger.error('The row filters must be non zero positive integers.')
             sys.exit(1)
         if filter(lambda x: not isinstance(x, int) or x <= 0, columns):
-            logger.error('The column filters must be positive integers.')
+            logger.error('The column filters must be non zero positive integers.')
             sys.exit(1)
         try:
             wb = load_workbook(file)
@@ -205,7 +206,7 @@ if __name__ == "__main__":
     # Usage for read function
     logger.info('Startting read...')
     data = excel.read(
-        '/Users/shy/Desktop/test3.xlsx',
+        '/Users/shy/Desktop/test30.xlsx',
         sheet=3,
         rows=[i for i in range(10, 20)],
         columns=[2, 5, 254])

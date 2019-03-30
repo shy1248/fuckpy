@@ -8,7 +8,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-03 23:49:07
-@LastTime: 2019-03-26 23:53:27
+@LastTime: 2019-03-30 13:20:22
 '''
 
 
@@ -28,7 +28,7 @@ def strtodatetime(strtime):
 
 
 class OrderedSet(collections.OrderedDict, collections.MutableSet):
-    '''有序集合'''
+    '''An ordered set implementation'''
 
     def update(self, *args, **kwargs):
         if kwargs:
@@ -74,7 +74,7 @@ class OrderedSet(collections.OrderedDict, collections.MutableSet):
 
 
 class DateRange(object):
-    '''A iterater for date'''
+    '''An iterator for day, which can be itrete for year, month, week and day'''
 
     def __init__(self, start=None, stop=None, step=1):
         current = date.fromtimestamp(time.time())
@@ -83,7 +83,7 @@ class DateRange(object):
         self.step = step
 
         if not isinstance(step, int) or step <= 0:
-            raise StopIteration("Iteration[step] must be a instance of 'int', and greate than 0.")
+            raise StopIteration("Iteration[step] must be a non zero positive interger.")
 
         if self.start >= self.stop:
             raise StopIteration('Iteration[start] >= Interation[stop].')
