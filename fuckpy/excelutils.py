@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: A simple toolkit for write anfd read excel file
 @Since: 2019-03-29 19:35:10
-@LastTime: 2019-03-30 14:06:02
+@LastTime: 2019-04-01 10:36:18
 '''
 
 import os
@@ -27,6 +27,9 @@ from openpyxl.utils.cell import get_column_letter
 from openpyxl.worksheet.dimensions import ColumnDimension
 
 from simplelogger import logger
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class ExcelUtil(object):
@@ -150,35 +153,10 @@ class ExcelUtil(object):
                 )
                 sys.exit(1)
 
-            if rows and not columns:
-                data = [
-                    tuple([
-                        ws.cell(row=x, column=y).value
-                        for y in range(1, ws.max_column + 1)
-                    ])
-                    for x in rows
-                ]
-            elif not rows and columns:
-                data = [
-                    tuple([ws.cell(row=x, column=y).value
-                           for y in columns])
-                    for x in range(1, ws.max_row + 1)
-                ]
-            elif rows and columns:
-                data = [
-                    tuple([ws.cell(row=x, column=y).value
-                           for y in columns])
-                    for x in rows
-                ]
-            else:
-                data = [
-                    tuple([
-                        ws.cell(row=x, column=y).value
-                        for y in range(1, ws.max_column + 1)
-                    ])
-                    for x in range(1, ws.max_row + 1)
-                ]
-            return data
+            dest_row_index = rows if rows else [i + 1 for i in range(ws.max_row + 1)]
+            dest_col_index = columns if columns else [i + 1 for i in range(ws.max_column + 1)]
+            dest_data = [tuple([ws.cell(row=x, column=y).value for y in dest_col_index]) for x in dest_row_index]
+            return dest_data
         except BadZipfile:
             logger.error(
                 'Load excel file {} failed, invalid file format.'.format(file))
@@ -197,7 +175,7 @@ if __name__ == "__main__":
             (2, 'Lenove', '')]
     data = {'title': title, 'data': data}
     excel.write(
-        file='/Users/shy/Desktop/test.xlsx',
+        file='c:/Users/Shy/Desktop/w_test.xlsx',
         data=data,
         sheet=u'测试',
         is_overwrite=True)
@@ -206,13 +184,13 @@ if __name__ == "__main__":
     # Usage for read function
     logger.info('Startting read...')
     data = excel.read(
-        '/Users/shy/Desktop/test30.xlsx',
+        'c:/Users/Shy/Desktop/r_test.xlsx',
         sheet=3,
         rows=[i for i in range(10, 20)],
         columns=[2, 5, 254])
     for row in data:
         print
         for cell in row:
-            print(cell),
+            print(cell.encode('gbk') if isinstance(cell, unicode) else cell),
     print
     logger.info('Read finish!')
