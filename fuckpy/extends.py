@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-03 23:49:07
-@LastTime: 2019-03-30 14:18:20
+@LastTime: 2019-04-16 15:38:23
 '''
 
 import re
@@ -18,7 +18,10 @@ import collections
 from datetime import date
 from datetime import timedelta
 
-from simplelogger import logger
+from simplelogger import SimpleLogger
+
+
+logger = SimpleLogger(handler=SimpleLogger.BOTH, level=SimpleLogger.D)
 
 
 def strtodatetime(strtime):

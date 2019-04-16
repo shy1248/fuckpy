@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: A simple toolkit for write anfd read excel file
 @Since: 2019-03-29 19:35:10
-@LastTime: 2019-04-01 10:36:18
+@LastTime: 2019-04-16 15:37:42
 '''
 
 import os
@@ -26,7 +26,10 @@ from openpyxl.styles import NamedStyle
 from openpyxl.utils.cell import get_column_letter
 from openpyxl.worksheet.dimensions import ColumnDimension
 
-from simplelogger import logger
+from simplelogger import SimpleLogger
+
+logger = logger = SimpleLogger(
+    handler=SimpleLogger.BOTH level=logging.D)
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

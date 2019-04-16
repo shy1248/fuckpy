@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-17 15:03:29
-@LastTime: 2019-03-30 14:26:28
+@LastTime: 2019-04-16 15:35:42
 '''
 
 import os
@@ -20,13 +20,15 @@ import pymysql
 import cx_Oracle
 from pyhive import hive
 
-from simplelogger import logger
+from simplelogger import SimpleLogger
 from singleton import singleton
 from extends import OrderedSet
 
 HIVE = 0
 MYSQL = 1
 ORACLE = 3
+
+logger = SimpleLogger(handler=SimpleLogger.BOTH, level=SimpleLogger.D)
 
 
 def get_client_by_conf(conf, setction, ctype=HIVE):

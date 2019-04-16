@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-02-02 16:43:24
-@LastTime: 2019-03-30 14:27:06
+@LastTime: 2019-04-16 15:36:43
 '''
 
 import os
@@ -17,7 +17,9 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
-from simplelogger import logger
+from simplelogger import SimpleLogger
+
+logger = SimpleLogger(handler=SimpleLogger.BOTH, level=SimpleLogger.D)
 
 
 class Account(object):

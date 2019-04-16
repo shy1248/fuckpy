@@ -7,15 +7,21 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 18:16:13
-@LastTime: 2019-03-30 14:27:46
+@LastTime: 2019-04-16 14:40:21
 '''
 
+__all__ = ['SimpleLogger']
+
 import os
+import sys
 import __main__
 import logging
 from logging import handlers
 
 from sysinfo import SYS_TYPE
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
@@ -56,30 +62,70 @@ class ColoredFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-# log format
-ch_format = '%(message)s'
-fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
-appname = os.path.basename(os.path.splitext(__main__.__file__)[0])
-# log file name
-logfile = '%s.log' % appname
+class SimpleLogger(object):
+    CONSOLE = 1
+    FILE = 2
+    BOTH = 3
+    # all levels
+    D = logging.DEBUG
+    I = logging.INFO
+    W = logging.WARN
+    E = logging.ERROR
+    C = logging.CRITICAL
 
-logger = logging.getLogger(os.path.split(__file__)[1])
-logger.setLevel(logging.DEBUG)
+    __logger = logging.getLogger(os.path.split(__file__)[1])
 
-# add console handler
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-ch.setFormatter(ColoredFormatter(ch_format, colored=True))
-logger.addHandler(ch)
-# add file handler
-fh = handlers.TimedRotatingFileHandler(
-    logfile, when='D', interval=1, backupCount=3, encoding='utf8')
-fh.setLevel(logging.INFO)
-fh.setFormatter(ColoredFormatter(fh_format, colored=False))
-logger.addHandler(fh)
+    def __init__(self, handler=CONSOLE, logfile=None, level=SimpleLogger.I):
+        # log format
+        ch_format = '%(message)s'
+        fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
+        SimpleLogger.__logger.setLevel(logging.DEBUG)
+
+        if handler != SimpleLogger.FILE:
+            # add console handler
+            ch = logging.StreamHandler()
+            ch.setLevel(level)
+            ch.setFormatter(ColoredFormatter(ch_format, colored=True))
+            SimpleLogger.__logger.addHandler(ch)
+
+        if handler != SimpleLogger.CONSOLE:
+            if logfile is None:
+                appname = os.path.basename(
+                    os.path.splitext(__main__.__file__)[0])
+                # log file name
+                logfile = '%s.log' % appname
+
+            # add file handler
+            fh = handlers.TimedRotatingFileHandler(
+                logfile, when='D', interval=1, backupCount=3, encoding='utf8')
+            fh.setLevel(level)
+            fh.setFormatter(ColoredFormatter(fh_format, colored=False))
+            SimpleLogger.__logger.addHandler(fh)
+
+    @staticmethod
+    def debug(msg, *args, **kwargs):
+        SimpleLogger.__logger.debug(msg, *args, **kwargs)
+
+    @staticmethod
+    def info(msg, *args, **kwargs):
+        SimpleLogger.__logger.info(msg, *args, **kwargs)
+
+    @staticmethod
+    def warn(msg, *args, **kwargs):
+        SimpleLogger.__logger.warn(msg, *args, **kwargs)
+
+    @staticmethod
+    def error(msg, *args, **kwargs):
+        SimpleLogger.__logger.error(msg, *args, **kwargs)
+
+    @staticmethod
+    def critical(msg, *args, **kwargs):
+        SimpleLogger.__logger.critical(msg, *args, **kwargs)
+
 
 if __name__ == '__main__':
-    logger.debug('Logging DEBUG example中文 ...')
+    logger = SimpleLogger(handler=SimpleLogger.CONSOLE, level=SimpleLogger.D)
+    logger.debug(u'Logging DEBUG example中文 ...'.encode('gbk'))
     logger.info('Logging INFO example ...')
     logger.warn('Logging WARN example ...')
     logger.error('Logging ERROR example ...')
