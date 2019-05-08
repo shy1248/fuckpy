@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-04-07 04:48:56
-@LastTime: 2019-04-15 13:49:00
+@ LastTime: 2019-06-02 01:56:50
 '''
 
 import os
@@ -15,7 +15,7 @@ import sys
 import time
 import Queue
 import threading
-import tkinter as tk
+import Tkinter as tk
 from abc import ABCMeta
 from abc import abstractmethod
 
@@ -61,7 +61,7 @@ class SystemTray(object):
         self.hover_text = hover_text
         self.on_quit = on_quit
 
-        menu_options = menu_options + (('Exit', None, self.QUIT),)
+        menu_options = menu_options + ((u'退出', None, self.QUIT),)
         self._next_action_id = self.FIRST_ID
         self.menu_actions_by_id = set()
         self.menu_options = self._add_ids_to_menu_options(list(menu_options))
