@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 18:16:13
-@LastTime: 2019-04-16 14:40:21
+@LastTime: 2019-05-01 09:09:40
 '''
 
 __all__ = ['SimpleLogger']
@@ -75,7 +75,7 @@ class SimpleLogger(object):
 
     __logger = logging.getLogger(os.path.split(__file__)[1])
 
-    def __init__(self, handler=CONSOLE, logfile=None, level=SimpleLogger.I):
+    def __init__(self, handler=CONSOLE, logfile=None, level=I):
         # log format
         ch_format = '%(message)s'
         fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
