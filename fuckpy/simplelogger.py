@@ -4,10 +4,9 @@
 @Author: shy
 @Email: yushuibo@ebupt.com / hengchen2005@gmail.com
 @Version: v1.0
-@Licence: GPLv3
 @Description: -
 @Since: 2019-01-06 18:16:13
-@LastTime: 2019-05-01 09:09:40
+@ LastTime: 2019-07-10 09:56:00
 '''
 
 __all__ = ['SimpleLogger']
@@ -18,6 +17,7 @@ import __main__
 import logging
 from logging import handlers
 
+from singleton import singleton
 from sysinfo import SYS_TYPE
 
 reload(sys)
@@ -61,7 +61,7 @@ class ColoredFormatter(logging.Formatter):
             record.msg = record.msg[len(COLOR_SEQ)::].replace(RESET_SEQ, '')
         return logging.Formatter.format(self, record)
 
-
+@singleton
 class SimpleLogger(object):
     CONSOLE = 1
     FILE = 2
@@ -90,8 +90,7 @@ class SimpleLogger(object):
 
         if handler != SimpleLogger.CONSOLE:
             if logfile is None:
-                appname = os.path.basename(
-                    os.path.splitext(__main__.__file__)[0])
+                appname = os.path.splitext(__main__.__file__)[0]
                 # log file name
                 logfile = '%s.log' % appname
 
@@ -124,6 +123,7 @@ class SimpleLogger(object):
 
 
 if __name__ == '__main__':
+
     logger = SimpleLogger(handler=SimpleLogger.CONSOLE, level=SimpleLogger.D)
     logger.debug(u'Logging DEBUG example中文 ...'.encode('gbk'))
     logger.info('Logging INFO example ...')
