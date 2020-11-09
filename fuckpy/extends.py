@@ -7,7 +7,7 @@
 @Licence: GPLv3
 @Description: -
 @Since: 2018-11-03 23:49:07
-@LastTime: 2019-04-16 15:38:23
+@ LastTime: 2019-08-20 15:48:47
 '''
 
 import re
@@ -20,7 +20,6 @@ from datetime import timedelta
 
 from simplelogger import SimpleLogger
 
-
 logger = SimpleLogger(handler=SimpleLogger.BOTH, level=SimpleLogger.D)
 
 
@@ -30,9 +29,8 @@ def strtodatetime(strtime):
     try:
         return date.fromtimestamp(
             time.mktime(
-                time.strptime(
-                    _strtime, fmt[:(len(_strtime) - 2 if len(_strtime) %
-                                    2 == 0 else len(_strtime) - 1)])))
+                time.strptime(_strtime,
+                              fmt[:(len(_strtime) - 2 if len(_strtime) % 2 == 0 else len(_strtime) - 1)])))
     except ValueError:
         raise ValueError('String "{}" can not format to datetime.'.format(strtime))
 
@@ -93,8 +91,7 @@ class DateRange(object):
         self.step = step
 
         if not isinstance(step, int) or step <= 0:
-            raise StopIteration(
-                "Iteration[step] must be a non zero positive interger.")
+            raise StopIteration("Iteration[step] must be a non zero positive interger.")
 
         if self.start >= self.stop:
             raise StopIteration('Iteration[start] >= Interation[stop].')
@@ -129,3 +126,37 @@ class DateRange(object):
             yield t.strftime(outfmt)
             next_ = t + timedelta(days=self.step)
             t = next_
+
+
+class Stack(object):
+
+    def __init__(self):
+        self._items = []
+
+    def size(self):
+        return len(self._items)
+
+    def push(self, item):
+        self._items.append(item)
+
+    def pop(self):
+        self._items.pop()
+
+    def peek(self):
+        return self._items[len(self._items) - 1]
+
+    def isEmpty(self):
+        return self._items == []
+
+
+if __name__ == "__main__":
+    s = Stack()
+    s.push('dog')
+    s.push('cat')
+    print(s.isEmpty())
+    print(s.peek())
+    print(s.size())
+    s.pop()
+    print(s.isEmpty())
+    print(s.peek())
+    print(s.size())

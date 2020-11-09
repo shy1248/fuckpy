@@ -1,32 +1,27 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
 '''
-@Author: shy
-@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
-@Version: v1.0
-@Licence: GPLv3
-@Description: -
-@Since: 2019-02-02 16:43:24
-@LastTime: 2019-04-16 15:36:43
+@ Since: 2019-08-03 22:58:05
+@ Author: shy
+@ Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@ Version: v1.0
+@ Description: A email send util
+@ LastTime: 2019-08-15 16:06:20
 '''
 
 import os
 import smtplib
+import warnings
 from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
-from simplelogger import SimpleLogger
-
-logger = SimpleLogger(handler=SimpleLogger.BOTH, level=SimpleLogger.D)
-
 
 class Account(object):
     '''A account of email'''
 
-    def __init__(self, server, port, username, password, name='Robat',
-                 ssl=True):
+    def __init__(self, server, port, username, password, name='Robat', ssl=True):
         self.server = server
         self.port = port
         self.username = username
@@ -47,10 +42,8 @@ class Account(object):
                 smtp = smtplib.SMTP(self.server, self.port)
             smtp.ehlo()
             smtp.login(self.username, self.passwd)
-        except Exception, e:
-            logger.error(
-                'Email client connect to server or login faild. The rease is:\n%s'
-                % e)
+        except Exception:
+            raise
 
         return smtp
 
@@ -58,13 +51,7 @@ class Account(object):
 class Email(object):
     '''An email object'''
 
-    def __init__(self,
-                 account,
-                 tolist,
-                 content,
-                 cclist=None,
-                 subject=None,
-                 attaches=None):
+    def __init__(self, account, tolist, content, cclist=None, subject=None, attaches=None):
         self.account = account
         self.tolist = tolist
         self.content = content
@@ -96,27 +83,24 @@ class Email(object):
         msg["Accept-Language"] = "zh-CN"
         msg["Accept-Charset"] = "ISO-8859-1,utf-8"
         msg.attach(puretext)
-        recivers = self.tolist.extend(
-            self.cclist) if self.cclist else self.tolist
+        recivers = self.tolist + self.cclist
 
         if self.attaches:
             for attache in self.attaches:
                 if not os.path.isfile(attache):
-                    logger.warn('Email attachement "%s" dose exist.' % attache)
+                    warnings.warn('Email attachement "%s" dose exist.' % attache)
+                    continue
 
                 filepart = MIMEApplication(open(attache, 'rb').read())
-                filepart.add_header(
-                    'Content-Disposition',
-                    'attachment',
-                    filename=os.path.basename(attache))
+                filepart.add_header('Content-Disposition', 'attachment', filename=os.path.basename(attache))
                 msg.attach(filepart)
 
         try:
             smtp = self.account.login()
             smtp.sendmail(me, recivers, msg.as_string())
             smtp.close()
-        except Exception, e:
-            logger.error('Send email failed. The rease is:\n%s' % str(e))
+        except Exception:
+            raise
 
 
 if __name__ == '__main__':
@@ -127,10 +111,5 @@ if __name__ == '__main__':
     tolist = ['zzzzz@ebupt.com']
 
     account = Account(server, port, username, password)
-    email_ = Email(
-        account,
-        tolist,
-        'This is a test message!',
-        subject='Email test!',
-        attaches=['resty.py'])
-    email_.send()
+    mail = Email(account, tolist, 'This is a test message!', subject='Email test!', attaches=['resty.py'])
+    mail.send()

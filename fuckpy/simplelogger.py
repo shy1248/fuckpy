@@ -1,44 +1,36 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
+
 '''
-@Author: shy
-@Email: yushuibo@ebupt.com / hengchen2005@gmail.com
-@Version: v1.0
-@Description: -
-@Since: 2019-01-06 18:16:13
-@ LastTime: 2019-07-10 09:56:00
+@ Author: shy
+@ Email: yushuibo@ebupt.com / hengchen2005@gmail.com
+@ Version: v1.0
+@ Description: -
+@ Since: 2020/5/28 17:50
 '''
 
-__all__ = ['SimpleLogger']
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
-import sys
-import __main__
 import logging
+import __main__
 from logging import handlers
 
-from singleton import singleton
-from sysinfo import SYS_TYPE
+from utils import singleton
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
+__all__ = ['SimpleLogger']
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 # The background is set with 40 plus the number of the color, and the foreground with 30
-
 # These are the sequences need to get colored ouput
 RESET_SEQ = "\033[0m"
 COLOR_SEQ = "\033[1;%dm"
 BOLD_SEQ = "\033[1m"
 
-COLORS = {
-    'WARNING': CYAN,
-    'INFO': MAGENTA,
-    'DEBUG': BLUE,
-    'CRITICAL': YELLOW,
-    'ERROR': RED
-}
+COLORS = {'WARNING': CYAN, 'INFO': MAGENTA, 'DEBUG': BLUE, 'CRITICAL': YELLOW, 'ERROR': RED}
 
 
 class ColoredFormatter(logging.Formatter):
@@ -49,17 +41,17 @@ class ColoredFormatter(logging.Formatter):
         self.colored = colored
 
     def format(self, record):
-        # TODO: waitting for implemention on windows platform
-        if SYS_TYPE == 'Windows':
-            return logging.Formatter.format(self, record)
-
         levelname = record.levelname
+        prefix_colored = COLOR_SEQ % (30 + COLORS[levelname])
         if self.colored and levelname in COLORS:
-            record.msg = COLOR_SEQ % (
-                30 + COLORS[levelname]) + record.msg + RESET_SEQ
+            record.msg = prefix_colored + record.msg + RESET_SEQ
         else:
-            record.msg = record.msg[len(COLOR_SEQ)::].replace(RESET_SEQ, '')
+            if prefix_colored in record.msg:
+                record.msg = record.msg[len(prefix_colored)::].replace(RESET_SEQ, '')
+            else:
+                pass
         return logging.Formatter.format(self, record)
+
 
 @singleton
 class SimpleLogger(object):
@@ -76,56 +68,59 @@ class SimpleLogger(object):
     __logger = logging.getLogger(os.path.split(__file__)[1])
 
     def __init__(self, handler=CONSOLE, logfile=None, level=I):
+        self.handler = handler
+        self.logfile = logfile
+        self.level = level
+
         # log format
-        ch_format = '%(message)s'
-        fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
+        self.ch_format = '%(message)s'
+        self.fh_format = '[%(asctime)s] - [%(levelname)s]: %(message)s'
         SimpleLogger.__logger.setLevel(logging.DEBUG)
 
-        if handler != SimpleLogger.FILE:
+        if self.handler != SimpleLogger.FILE:
             # add console handler
-            ch = logging.StreamHandler()
-            ch.setLevel(level)
-            ch.setFormatter(ColoredFormatter(ch_format, colored=True))
-            SimpleLogger.__logger.addHandler(ch)
+            self.ch = logging.StreamHandler()
+            self.ch.setLevel(self.level)
+            self.ch.setFormatter(ColoredFormatter(self.ch_format, colored=True))
+            SimpleLogger.__logger.addHandler(self.ch)
 
-        if handler != SimpleLogger.CONSOLE:
-            if logfile is None:
+        if self.handler != SimpleLogger.CONSOLE:
+            if self.logfile is None:
                 appname = os.path.splitext(__main__.__file__)[0]
                 # log file name
-                logfile = '%s.log' % appname
+                self.logfile = '%s.log' % appname
 
             # add file handler
-            fh = handlers.TimedRotatingFileHandler(
-                logfile, when='D', interval=1, backupCount=3, encoding='utf8')
-            fh.setLevel(level)
-            fh.setFormatter(ColoredFormatter(fh_format, colored=False))
-            SimpleLogger.__logger.addHandler(fh)
+            self.fh = handlers.TimedRotatingFileHandler(
+                    self.logfile, when='MIDNIGHT', interval=1, backupCount=3, encoding='utf8')
+            self.fh.setLevel(self.level)
+            self.fh.setFormatter(ColoredFormatter(self.fh_format, colored=False))
+            SimpleLogger.__logger.addHandler(self.fh)
 
-    @staticmethod
-    def debug(msg, *args, **kwargs):
+    @classmethod
+    def debug(cls, msg, *args, **kwargs):
         SimpleLogger.__logger.debug(msg, *args, **kwargs)
 
-    @staticmethod
-    def info(msg, *args, **kwargs):
+    @classmethod
+    def info(cls, msg, *args, **kwargs):
         SimpleLogger.__logger.info(msg, *args, **kwargs)
 
-    @staticmethod
-    def warn(msg, *args, **kwargs):
+    @classmethod
+    def warn(cls, msg, *args, **kwargs):
         SimpleLogger.__logger.warn(msg, *args, **kwargs)
 
-    @staticmethod
-    def error(msg, *args, **kwargs):
+    @classmethod
+    def error(cls, msg, *args, **kwargs):
         SimpleLogger.__logger.error(msg, *args, **kwargs)
 
-    @staticmethod
-    def critical(msg, *args, **kwargs):
+    @classmethod
+    def critical(cls, msg, *args, **kwargs):
         SimpleLogger.__logger.critical(msg, *args, **kwargs)
 
 
 if __name__ == '__main__':
-
     logger = SimpleLogger(handler=SimpleLogger.CONSOLE, level=SimpleLogger.D)
-    logger.debug(u'Logging DEBUG example中文 ...'.encode('gbk'))
+    logger.debug('Logging DEBUG example 中文测试 ...'.encode('gbk'))
     logger.info('Logging INFO example ...')
     logger.warn('Logging WARN example ...')
     logger.error('Logging ERROR example ...')

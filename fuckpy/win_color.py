@@ -27,7 +27,7 @@ BACKGROUND_INTENSITY = 0x80  # background color is intensified.
 
 class Color:
     ''' See http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winprog/winprog/windows_api_reference.asp
-    for information on Windows APIs. - www.jb51.net'''
+    for information on Windows APIs.'''
     std_out_handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
 
     def set_cmd_color(self, color, handle=std_out_handle):
